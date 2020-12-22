@@ -1,0 +1,7 @@
+{
+    "source": "orta/misfits",
+    "languages": [],
+    "docsRoots": [
+        { "from": "./1", "to": "./1" }
+    ]
+}

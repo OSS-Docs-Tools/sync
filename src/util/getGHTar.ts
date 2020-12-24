@@ -7,11 +7,11 @@ import gunzip from "gunzip-maybe"
 import https from "https"
 
 interface TarOpts {
-    user: string
-    repo: string
-    to: string
-    branch: string
-    templatepath?: string
+  user: string
+  repo: string
+  to: string
+  branch: string
+  templatepath?: string
 }
 
 export const getGHTar = ({ user, branch, repo, templatepath = "", to }: TarOpts) => {
@@ -20,7 +20,7 @@ export const getGHTar = ({ user, branch, repo, templatepath = "", to }: TarOpts)
     const ignorepath = path.join(to, ignorePrefix)
     const extractTar = tar.extract(to, {
       map: (header: any) => {
-        const suffix = branch === "v2"   ? "-2" : ""
+        const suffix = branch === "v2" ? "-2" : ""
         const prefix = `${repo}${suffix}/${templatepath}`
         if (header.name.startsWith(prefix)) {
           return Object.assign({}, header, {
@@ -37,9 +37,7 @@ export const getGHTar = ({ user, branch, repo, templatepath = "", to }: TarOpts)
         return isInIgnoreFolder
       },
     })
-    https.get(`https://codeload.github.com/${user}/${repo}/tar.gz/${branch}`, (response: any) =>
-      response.pipe(gunzip()).pipe(extractTar)
-    )
+    https.get(`https://codeload.github.com/${user}/${repo}/tar.gz/${branch}`, (response: any) => response.pipe(gunzip()).pipe(extractTar))
     extractTar.on("error", reject)
     extractTar.on("finish", resolve)
   })

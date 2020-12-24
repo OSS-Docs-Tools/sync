@@ -1,12 +1,13 @@
-import { readFileSync } from "fs"
+// node dist/index.js pull  asda/asdasd 111 --from-cwd ./fixtures/target --to-cwd fixtures/source
 
-import { moveEnFoldersIn, moveLocaleFoldersIn } from "../util/setupFolders"
+import { readFileSync } from "fs"
+import { moveLocaleFoldersIn } from "../util/setupFolders"
 import { existsSync, mkdirSync } from "fs"
 import { join } from "path"
 import { ghRepresentationForPath } from "../util/refForPath"
 import { getGHTar } from "../util/getGHTar"
 
-export const pullCommand = async (opts: { target: string, toCwd: string, fromCwd?: string }) => {
+export const pullCommand = async (opts: { target: string; toCwd: string; fromCwd?: string }) => {
   const ghRep = ghRepresentationForPath(opts.target)
 
   const cachedir: string = require("cachedir")("oss-doc-sync")
@@ -27,7 +28,9 @@ export const pullCommand = async (opts: { target: string, toCwd: string, fromCwd
 
   const localizeJSONPath = join(localCopy, "localize.json")
   if (!existsSync(localizeJSONPath)) {
-    throw new Error(`There isn't a localize.json file in the root of this: ${user}/${repo}#${ghRep.branch} (locally found at ${localizeJSONPath})`)
+    throw new Error(
+      `There isn't a localize.json file in the root of this: ${user}/${repo}#${ghRep.branch} (locally found at ${localizeJSONPath})`
+    )
   }
 
   const settings = JSON.parse(readFileSync(localizeJSONPath, "utf8"))

@@ -26,12 +26,11 @@ export const moveLocaleFoldersIn = async (appWD: string, lclWD: string, settings
     for (const root of settings.docsRoots) {
         const fromDir = join(lclWD, root.to)
         const toDir = join(appWD, root.from)
-        
-        // const en = join(fromDir, "en")
+
         const allFolders = readdirSync(fromDir)
-        const folders = allFolders.filter( f => statSync(join(lclWD, f)).isDirectory() ).filter(f => f !== "en")
+        const folders = allFolders.filter( f => statSync(join(fromDir, f)).isDirectory() ).filter(f => f !== "en")
         for (const lang of folders) {
-            await mvdir(join(fromDir, lang), join(toDir),  { copy: true})
+            await mvdir(join(fromDir, lang), join(toDir, lang),  { copy: true})
         }
     }
 }

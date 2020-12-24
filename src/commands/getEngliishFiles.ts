@@ -1,20 +1,21 @@
 import { readFileSync } from "fs"
-
-import { moveEnFoldersIn, moveLocaleFoldersIn } from "../util/setupFolders"
+import { moveEnFoldersIn } from "../util/setupFolders"
 import { existsSync, mkdirSync } from "fs"
 import { join } from "path"
 import { ghRepresentationForPath } from "../util/refForPath"
 import { getGHTar } from "../util/getGHTar"
 
-export const pullCommand = async (opts: { target: string, toCwd: string, fromCwd?: string }) => {
-  const ghRep = ghRepresentationForPath(opts.target)
+// node dist/index.js get-en  asda/asdasd 111 --from-cwd ./fixtures/source --to-cwd fixtures/target
 
+export const getEnglish = async (opts: { source: string, toCwd: string, fromCwd?: string }) => {
+  const ghRep = ghRepresentationForPath(opts.source)
+
+  console.log(opts, ghRep)
   const cachedir: string = require("cachedir")("oss-doc-sync")
   const [user, repo] = ghRep.repoSlug!.split("/")
   const localCopy = opts.fromCwd || join(cachedir, user, repo)
   const toDir = opts.toCwd
 
-  // Grab a copy of the other repo, and pull in the files
   if (!existsSync(localCopy)) {
     mkdirSync(join(cachedir, user))
     await getGHTar({
@@ -25,11 +26,11 @@ export const pullCommand = async (opts: { target: string, toCwd: string, fromCwd
     })
   }
 
-  const localizeJSONPath = join(localCopy, "localize.json")
+  const localizeJSONPath = join(toDir, "localize.json")
   if (!existsSync(localizeJSONPath)) {
-    throw new Error(`There isn't a localize.json file in the root of this: ${user}/${repo}#${ghRep.branch} (locally found at ${localizeJSONPath})`)
+    throw new Error(`There isn't a localize.json file in the root of the repo: ${user}/${repo}#${ghRep.branch} (expected at ${localizeJSONPath})`)
   }
 
   const settings = JSON.parse(readFileSync(localizeJSONPath, "utf8"))
-  moveLocaleFoldersIn(toDir, localCopy, settings)
+  moveEnFoldersIn(localCopy, toDir, settings)
 }

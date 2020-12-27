@@ -19,26 +19,17 @@ export const getGHTar = ({ user, branch, repo, templatepath = "", to }: TarOpts)
     const ignorePrefix = "__INITIT_IGNORE__/"
     const ignorepath = path.join(to, ignorePrefix)
     const extractTar = tar.extract(to, {
-      map: (header: any) => {
-        const suffix = branch === "v2" ? "-2" : ""
-        const prefix = `${repo}${suffix}/${templatepath}`
-        if (header.name.startsWith(prefix)) {
-          return Object.assign({}, header, {
-            name: header.name.substr(prefix.length),
-          })
-        } else {
-          return Object.assign({}, header, {
-            name: ignorePrefix + header.name,
-          })
-        }
-      },
       ignore: (filepath: string) => {
         const isInIgnoreFolder = !path.relative(ignorepath, filepath).startsWith("..")
         return isInIgnoreFolder
       },
     })
-    https.get(`https://codeload.github.com/${user}/${repo}/tar.gz/${branch}`, (response: any) => response.pipe(gunzip()).pipe(extractTar))
-    extractTar.on("error", reject)
+    const url = `https://codeload.github.com/${user}/${repo}/tar.gz/${branch}`
+    https.get(url, (response: any) => response.pipe(gunzip()).pipe(extractTar))
+    extractTar.on("error", err => {
+      console.error(`Could not download from ${url} - maybe wrong branch?`)
+      reject(err)
+    })
     extractTar.on("finish", resolve)
   })
 }

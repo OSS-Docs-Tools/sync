@@ -12,18 +12,22 @@ export const pullCommand = async (opts: { target: string; toCwd: string; fromCwd
 
   const cachedir: string = require("cachedir")("oss-doc-sync")
   const [user, repo] = ghRep.repoSlug!.split("/")
-  const localCopy = opts.fromCwd || join(cachedir, user, repo)
+  let localCopy = opts.fromCwd
   const toDir = opts.toCwd
 
   // Grab a copy of the other repo, and pull in the files
-  if (!existsSync(localCopy)) {
-    mkdirSync(join(cachedir, user))
+  if (!localCopy) {
+    if (!existsSync(cachedir)) mkdirSync(cachedir)
+    if (!existsSync(join(cachedir, user))) mkdirSync(join(cachedir, user))
+
     await getGHTar({
       user,
       repo,
       branch: ghRep.branch,
-      to: localCopy,
+      to: join(cachedir, user, repo),
     })
+
+    localCopy = join(cachedir, user, repo, `${repo}-${ghRep.branch}`)
   }
 
   const localizeJSONPath = join(localCopy, "localize.json")

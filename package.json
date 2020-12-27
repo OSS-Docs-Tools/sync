@@ -1,5 +1,5 @@
 {
-  "version": "0.1.1",
+  "version": "0.2.0",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -8,7 +8,7 @@
     "src"
   ],
   "bin": {
-    "sync": "bin/sync"
+    "docs-sync": "bin/docs-sync"
   },
   "engines": {
     "node": ">=10"

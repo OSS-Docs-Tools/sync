@@ -1,5 +1,5 @@
 import yargs from 'yargs/yargs'
-import { getEnglish } from './commands/getEngliishFiles';
+import { getEnglish } from './commands/getEnglishFiles';
 import { pullCommand } from './commands/pull';
 
 export interface CLIOpts {
@@ -27,5 +27,8 @@ yargs(process.argv.slice(2))
 })
 
 .command('validate-against-en', 'Used in localizations to validate against english versions', () => {}, (_argv: CLIOpts) => {
+  console.log('this command will be run by default2')
+})
+.command('update-github-issues', 'Uses info in localization.json to create issues covering the state of translations', () => {}, (_argv: CLIOpts) => {
   console.log('this command will be run by default2')
 })

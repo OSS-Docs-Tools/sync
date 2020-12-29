@@ -10,6 +10,12 @@ export interface CLIOpts {
   fromCwd: string
 }
 
+export interface Settings {
+    app: string,
+    issues: Record<string, number>
+    docsRoots:  Array<{ from: string, to: string }>
+}
+
 yargs(process.argv.slice(2))
 
 .command('pull <target> ', 'Used in your repo to grab localizations', (argv) => {
@@ -32,3 +38,5 @@ yargs(process.argv.slice(2))
 .command('update-github-issues', 'Uses info in localization.json to create issues covering the state of translations', () => {}, (_argv: CLIOpts) => {
   console.log('this command will be run by default2')
 })
+.argv;
+

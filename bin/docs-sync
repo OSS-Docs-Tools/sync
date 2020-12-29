@@ -1,4 +1,16 @@
 #! /usr/bin/env node
 
-const {join} = require("path")
-require(join(__dirname, ".."))
+var path = require('path');
+var fs   = require('fs');
+
+var potentialPaths = [
+  path.join(process.cwd(), 'node_modules/@oss-docs/sync/dist/index.js'),
+  path.join(__dirname, '../dist/index.js')
+];
+
+for (var i = 0, len = potentialPaths.length; i < len; i++) {
+  if (fs.existsSync(potentialPaths[i])) {
+    require(potentialPaths[i])
+    break;
+  }
+}

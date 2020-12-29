@@ -16,7 +16,7 @@ This CLI expects you to have a `localize.json` in the root of your localization 
     "app": "microsft/TypeScript-Website",
     "issues": {
       "pt": 23,
-      "zh: 44
+      "zh": 44
     },
     "docsRoots": [        
         { "from": "packages/playground-examples/copy/", "to": "docs/playground" },

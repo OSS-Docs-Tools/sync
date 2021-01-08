@@ -28,9 +28,11 @@ yargs(process.argv.slice(2))
 .command('get-en <source>', 'Used in localizations to get the english versions', (argv) => {
   argv.options("to-cwd", { type: "string", default: ".", description: "What folder do you want to treat as the base for the localize.json to use" })
   argv.options("from-cwd", { type: "string", description: "Instead of downloading from GitHub, you can use a local dir as the place to pull from"})
-}, (argv: CLIOpts) => {
+  argv.options("all", { type: "boolean", default: false, description: "Also include the other folders"})
+}, (argv: CLIOpts & { all: boolean }) => {
   getEnglish(argv)
 })
+
 
 .command('validate-against-en', 'Used in localizations to validate against english versions', () => {}, (_argv: CLIOpts) => {
   console.log('this command will be run by default2')

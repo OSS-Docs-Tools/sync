@@ -1,5 +1,5 @@
-import { readFileSync } from "fs"
-import { moveEnFoldersIn } from "../util/setupFolders"
+import { readFileSync, readdirSync } from "fs"
+import { moveEnFoldersIn, moveAllFoldersIn } from "../util/setupFolders"
 import { existsSync, mkdirSync } from "fs"
 import { join } from "path"
 import { ghRepresentationForPath } from "../util/refForPath"
@@ -7,7 +7,7 @@ import { getGHTar } from "../util/getGHTar"
 
 // node dist/index.js get-en --from-cwd ./fixtures/source --to-cwd fixtures/target
 
-export const getEnglish = async (opts: { source: string; toCwd: string; fromCwd?: string }) => {
+export const getEnglish = async (opts: { source: string; toCwd: string; fromCwd?: string, all:boolean }) => {
   const toDir = opts.toCwd
   const localizeJSONPath = join(toDir, "localize.json")
   if (!existsSync(localizeJSONPath)) {
@@ -36,8 +36,13 @@ export const getEnglish = async (opts: { source: string; toCwd: string; fromCwd?
       to: join(cachedir, user, repo),
     })
 
-    localCopy = join(cachedir, user, repo, `${repo}-${ghRep.branch}`)
+    const unzipped = join(cachedir, user, repo)
+    localCopy =  join(unzipped, readdirSync(unzipped).find(p => !p.startsWith("."))!)
   }
 
-  moveEnFoldersIn(localCopy, toDir, settings)
+  if (opts.all) {
+    moveAllFoldersIn(localCopy, toDir, settings)
+  } else {
+    moveEnFoldersIn(localCopy, toDir, settings)
+  }
 }

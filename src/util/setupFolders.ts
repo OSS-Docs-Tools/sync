@@ -6,6 +6,19 @@ interface Settings {
   docsRoots: Array<{ from: string; to: string }>
 }
 
+export const moveAllFoldersIn = async (fromWD: string, toWD: string, settings: Settings) => {
+  for (const root of settings.docsRoots) {
+    const fromDir = join(fromWD, root.from)
+    const toDir = join(toWD, root.to)
+
+    const allFolders = readdirSync(fromDir)
+    const folders = allFolders.filter(f => statSync(join(fromDir, f)).isDirectory()).filter(f => f !== "en")
+    for (const lang of folders) {
+      await mvdir(join(fromDir, lang), join(toDir, lang), { copy: true })
+    }
+  }
+}
+
 export const moveEnFoldersIn = async (fromWD: string, toWD: string, settings: Settings) => {
   for (const root of settings.docsRoots) {
     const fromDir = join(fromWD, root.from)

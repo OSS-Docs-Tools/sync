@@ -1,6 +1,6 @@
 // node dist/index.js pull  asda/asdasd 111 --from-cwd ./fixtures/target --to-cwd fixtures/source
 
-import { readFileSync } from "fs"
+import { readFileSync, readdirSync } from "fs"
 import { moveLocaleFoldersIn } from "../util/setupFolders"
 import { existsSync, mkdirSync } from "fs"
 import { join } from "path"
@@ -27,7 +27,9 @@ export const pullCommand = async (opts: { target: string; toCwd: string; fromCwd
       to: join(cachedir, user, repo),
     })
 
-    localCopy = join(cachedir, user, repo, `${repo}-${ghRep.branch}`)
+
+    const unzipped = join(cachedir, user, repo)
+    localCopy =  join(unzipped, readdirSync(unzipped).find(p => !p.startsWith("."))!)
   }
 
   const localizeJSONPath = join(localCopy, "localize.json")

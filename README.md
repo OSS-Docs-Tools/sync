@@ -19,10 +19,10 @@ This CLI expects you to have a `localize.json` in the root of your localization 
       "zh": 44
     },
     "docsRoots": [        
-        { "from": "packages/playground-examples/copy/", "to": "docs/playground" },
-        { "from": "packages/tsconfig-reference/copy/", "to": "docs/tsconfig" },
-        { "from": "packages/typescriptlang-org/src/copy/", "to": "docs/typescriptlang" },
-        { "from": "packages/documentation/copy/", "to": "docs/documentation" }
+        { "name": "Playground", "from": "packages/playground-examples/copy/", "to": "docs/playground" },
+        { "name": "TSConfig Reference", "from": "packages/tsconfig-reference/copy/", "to": "docs/tsconfig" },
+        { "name": "Website Copy", "from": "packages/typescriptlang-org/src/copy/", "to": "docs/typescriptlang" },
+        { "name": "Handbook", "from": "packages/documentation/copy/", "to": "docs/documentation" }
     ]
 }
 ```

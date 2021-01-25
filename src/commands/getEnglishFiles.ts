@@ -7,13 +7,11 @@ import { getGHTar } from "../util/getGHTar"
 
 // node dist/index.js get-en --from-cwd ./fixtures/source --to-cwd fixtures/target
 
-export const getEnglish = async (opts: { source: string; toCwd: string; fromCwd?: string, all:boolean }) => {
+export const getEnglish = async (opts: { source: string; toCwd: string; fromCwd?: string; all: boolean }) => {
   const toDir = opts.toCwd
   const localizeJSONPath = join(toDir, "localize.json")
   if (!existsSync(localizeJSONPath)) {
-    throw new Error(
-      `There isn't a localize.json file in the root of the current working dir (expected at ${localizeJSONPath})`
-    )
+    throw new Error(`There isn't a localize.json file in the root of the current working dir (expected at ${localizeJSONPath})`)
   }
 
   const settings = JSON.parse(readFileSync(localizeJSONPath, "utf8"))
@@ -22,7 +20,6 @@ export const getEnglish = async (opts: { source: string; toCwd: string; fromCwd?
   const cachedir: string = require("cachedir")("oss-doc-sync")
   const [user, repo] = ghRep.repoSlug!.split("/")
   let localCopy = opts.fromCwd
-
 
   // Grab a copy of the other repo, and pull in the files
   if (!localCopy) {
@@ -37,7 +34,7 @@ export const getEnglish = async (opts: { source: string; toCwd: string; fromCwd?
     })
 
     const unzipped = join(cachedir, user, repo)
-    localCopy =  join(unzipped, readdirSync(unzipped).find(p => !p.startsWith("."))!)
+    localCopy = join(unzipped, readdirSync(unzipped).find(p => !p.startsWith("."))!)
   }
 
   if (opts.all) {

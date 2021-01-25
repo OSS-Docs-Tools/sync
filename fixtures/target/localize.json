@@ -1,5 +1,5 @@
 {
-    "source": "orta/misfits",
+    "app": "orta/misfits",
     "languages": [],
     "docsRoots": [
         { "from": "./1", "to": "./1" }

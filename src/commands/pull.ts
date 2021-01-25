@@ -27,9 +27,8 @@ export const pullCommand = async (opts: { target: string; toCwd: string; fromCwd
       to: join(cachedir, user, repo),
     })
 
-
     const unzipped = join(cachedir, user, repo)
-    localCopy =  join(unzipped, readdirSync(unzipped).find(p => !p.startsWith("."))!)
+    localCopy = join(unzipped, readdirSync(unzipped).find(p => !p.startsWith("."))!)
   }
 
   const localizeJSONPath = join(localCopy, "localize.json")

@@ -31,7 +31,6 @@ yargs(process.argv.slice(2)).scriptName("docs-sync")
   argv.options("from-cwd", { type: "string", description: "Instead of downloading from GitHub, you can use a local dir as the place to pull from"})
   argv.options("all", { type: "boolean", default: false, description: "Also include the other folders"})
 }, (argv: CLIOpts & { all: boolean }) => {
-  console.log("EN")
   getEnglish(argv)
 })
 

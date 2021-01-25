@@ -4,6 +4,7 @@ import { existsSync, mkdirSync } from "fs"
 import { join } from "path"
 import { ghRepresentationForPath } from "../util/refForPath"
 import { getGHTar } from "../util/getGHTar"
+import { Settings } from ".."
 
 // node dist/index.js get-en --from-cwd ./fixtures/source --to-cwd fixtures/target
 
@@ -14,7 +15,7 @@ export const getEnglish = async (opts: { source: string; toCwd: string; fromCwd?
     throw new Error(`There isn't a localize.json file in the root of the current working dir (expected at ${localizeJSONPath})`)
   }
 
-  const settings = JSON.parse(readFileSync(localizeJSONPath, "utf8"))
+  const settings = JSON.parse(readFileSync(localizeJSONPath, "utf8")) as Settings
   const ghRep = ghRepresentationForPath(opts.source)
 
   const cachedir: string = require("cachedir")("oss-doc-sync")

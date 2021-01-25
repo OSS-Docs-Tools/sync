@@ -1,3 +1,4 @@
+
 export const ghRepresentationForPath = (value: string) => {
   const afterAt = value.includes("@") ? value.split("@")[1] : value
   return {
@@ -7,3 +8,5 @@ export const ghRepresentationForPath = (value: string) => {
     referenceString: value,
   }
 }
+
+export type GHRep = ReturnType<typeof ghRepresentationForPath>

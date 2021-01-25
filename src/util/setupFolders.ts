@@ -55,4 +55,6 @@ export const moveLocaleFoldersIn = async (appWD: string, lclWD: string, settings
 
     console.error(`  ${chalk.bold(fromDir)} [${folders.join(", ")}] -> ${chalk.bold(toDir)}`)
   }
+
+  console.error("")
 }

@@ -34,8 +34,9 @@ export const moveEnFoldersIn = async (fromWD: string, toWD: string, settings: Se
     }
 
     await mvdir(en, toEN, { copy: true })
-    console.error(`  ${chalk.bold(root.from)} ->  ${chalk.bold(toEN)}`)
-  }  
+    console.error(`  ${chalk.bold(root.from)} -> ${chalk.bold(toEN)}`)
+  }
+  console.error("")
 }
 
 export const moveLocaleFoldersIn = async (appWD: string, lclWD: string, settings: Settings) => {
@@ -52,6 +53,8 @@ export const moveLocaleFoldersIn = async (appWD: string, lclWD: string, settings
       await mvdir(join(fromDir, lang), join(toDir, lang), { copy: true })
     }
 
-    console.error(`  ${chalk.bold(fromDir)} [${folders.join(", ")}] ->  ${chalk.bold(toDir)}`)
+    console.error(`  ${chalk.bold(fromDir)} [${folders.join(", ")}] -> ${chalk.bold(toDir)}`)
   }
+
+  console.error("")
 }

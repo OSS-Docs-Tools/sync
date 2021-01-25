@@ -1,6 +1,7 @@
 import yargs from 'yargs/yargs'
 import { getEnglish } from './commands/getEnglishFiles';
 import { pullCommand } from './commands/pull';
+import { updateIssues } from './commands/updateIssues';
 import { validate } from './commands/validate';
 
 export interface CLIOpts {
@@ -14,7 +15,7 @@ export interface CLIOpts {
 export interface Settings {
     app: string,
     issues: Record<string, number>
-    docsRoots:  Array<{ from: string, to: string }>
+    docsRoots:  Array<{ name: string, from: string, to: string }>
 }
 
 yargs(process.argv.slice(2)).scriptName("docs-sync")
@@ -41,8 +42,8 @@ yargs(process.argv.slice(2)).scriptName("docs-sync")
   validate(argv)
 })
 
-.command('update-github-issues', 'Uses info in localization.json to create issues covering the state of translations', () => {}, (_argv: CLIOpts) => {
-  console.log('this command will be run by default2')
+.command('update-github-issues <this-repo>', 'Uses info in localization.json to create issues covering the state of translations', () => {}, (argv: { thisRepo: string}) => {
+  updateIssues(argv)
 })
 .argv;
 

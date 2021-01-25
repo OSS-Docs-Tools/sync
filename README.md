@@ -13,7 +13,7 @@ This CLI expects you to have a `localize.json` in the root of your localization 
 
 ```json
 {
-    "app": "microsft/TypeScript-Website",
+    "app": "microsft/TypeScript-Website#v2",
     "issues": {
       "pt": 23,
       "zh": 44

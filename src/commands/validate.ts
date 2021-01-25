@@ -17,9 +17,7 @@ export const validate = async (opts: { toCwd: string; fromCwd?: string }) => {
 
   const localizeJSONPath = join(toDir, "localize.json")
   if (!existsSync(localizeJSONPath)) {
-    throw new Error(
-      `There isn't a localize.json file in the root of the current working dir (expected at ${localizeJSONPath})`
-    )
+    throw new Error(`There isn't a localize.json file in the root of the current working dir (expected at ${localizeJSONPath})`)
   }
 
   const settings = JSON.parse(readFileSync(localizeJSONPath, "utf8")) as Settings
@@ -28,7 +26,6 @@ export const validate = async (opts: { toCwd: string; fromCwd?: string }) => {
   const cachedir: string = require("cachedir")("oss-doc-sync")
   const [user, repo] = ghRep.repoSlug!.split("/")
   let localCopy = opts.fromCwd
-
 
   // Grab a copy of the other repo, and pull in the files
   if (!localCopy) {
@@ -46,7 +43,7 @@ export const validate = async (opts: { toCwd: string; fromCwd?: string }) => {
     localCopy = join(unzipped, readdirSync(unzipped).find(p => !p.startsWith("."))!)
   }
 
-  const wrong: {path: string, lang: string, from: string }[] = []
+  const wrong: { path: string; lang: string; from: string }[] = []
 
   for (const root of settings.docsRoots) {
     process.stderr.write(`\n  ${chalk.bold(root.to)}:`)
@@ -60,7 +57,7 @@ export const validate = async (opts: { toCwd: string; fromCwd?: string }) => {
     }
 
     const englishTree = recursiveReadDirSync(en)
-    
+
     const allFolders = readdirSync(toDir)
     const languages = allFolders.filter(f => statSync(join(toDir, f)).isDirectory()).filter(f => f !== "en")
     languages.forEach(lang => {
@@ -73,11 +70,11 @@ export const validate = async (opts: { toCwd: string; fromCwd?: string }) => {
       langTree.forEach(path => {
         const enRelative = path.replace(fullpath, "")
         const reRooted = join(appDir, "en", enRelative)
-        
+
         if (!englishTree.includes(reRooted)) {
           error = true
           process.exitCode = 1
-          wrong.push({ path, lang,  from: root.from})
+          wrong.push({ path, lang, from: root.from })
         }
       })
       process.stderr.write(error ? cross : tick)
@@ -87,7 +84,7 @@ export const validate = async (opts: { toCwd: string; fromCwd?: string }) => {
 
   if (wrong.length) {
     console.error(chalk.bold.red("\nFiles with paths that aren't the same as English files:\n"))
-     
+
     wrong.forEach(w => {
       console.error("  " + w.path)
     })

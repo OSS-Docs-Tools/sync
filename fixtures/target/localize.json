@@ -1,7 +1,20 @@
 {
-    "app": "orta/misfits",
-    "languages": [],
+    "app": "microsoft/TypeScript-Website#v2",
+    "issues": {
+      "pt": 1,
+      "ja": 3,
+      "es": 4,
+      "zh": 5,
+      "ko": 6,
+      "id": 7,
+      "uk": 8,
+      "pl": 9,
+      "it": 10
+    },
     "docsRoots": [
         { "name": "docs", "from": "./1", "to": "./1" }
-    ]
+    ],
+    "validate": {
+        "ignoreFiles": ["a/b"]
+      }
 }

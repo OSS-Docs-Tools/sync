@@ -16,6 +16,9 @@ export interface Settings {
     app: string,
     issues: Record<string, number>
     docsRoots:  Array<{ name: string, from: string, to: string }>
+    validate?: {
+      ignoreFiles?: string[]
+    }
 }
 
 yargs(process.argv.slice(2)).scriptName("docs-sync")

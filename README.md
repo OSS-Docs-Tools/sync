@@ -18,11 +18,14 @@ This CLI expects you to have a `localize.json` in the root of your localization 
       "pt": 23,
       "zh": 44
     },
-    "docsRoots": [        
+    "docsRoots": [
         { "name": "Playground", "from": "packages/playground-examples/copy/", "to": "docs/playground" },
         { "name": "TSConfig Reference", "from": "packages/tsconfig-reference/copy/", "to": "docs/tsconfig" },
         { "name": "Website Copy", "from": "packages/typescriptlang-org/src/copy/", "to": "docs/typescriptlang" },
         { "name": "Handbook", "from": "packages/documentation/copy/", "to": "docs/documentation" }
-    ]
+    ],
+    "validate": {
+        "ignoreFiles": ["docs/playground/*.js"]
+      }
 }
 ```

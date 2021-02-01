@@ -5,6 +5,7 @@ import { ghRepresentationForPath } from "../util/refForPath"
 import { Settings } from ".."
 import { recursiveReadDirSync } from "../util/recursiveReadDirSync"
 import { cloneRepo } from "../util/cloneRepo"
+import micromatch  from 'micromatch'
 
 // node dist/index.js validate  --to-cwd fixtures/target --from-cwd ./fixtures/source
 
@@ -43,14 +44,19 @@ export const validate = async (opts: { toCwd: string; fromCwd?: string }) => {
     }
 
     const englishTree = recursiveReadDirSync(en)
+    let allFolders = readdirSync(toDir)
 
-    const allFolders = readdirSync(toDir)
     const languages = allFolders.filter(f => statSync(join(toDir, f)).isDirectory()).filter(f => f !== "en")
     languages.forEach(lang => {
       process.stderr.write(` ${lang}`)
 
       const fullpath = join(toDir, lang)
-      const langTree = recursiveReadDirSync(fullpath)
+      let langTree = recursiveReadDirSync(fullpath)
+
+      if (settings.validate?.ignoreFiles) {
+        const toRemove = micromatch(langTree, settings.validate?.ignoreFiles)
+        langTree = langTree.filter(i => !toRemove.includes(i))
+      }
 
       let error = false
       langTree.forEach(path => {

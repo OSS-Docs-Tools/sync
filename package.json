@@ -1,5 +1,5 @@
 {
-  "version": "1.0.1",
+  "version": "1.1.1",
   "license": "MIT",
   "repository": "OSS-Docs-Tools/sync",
   "main": "dist/index.js",
@@ -51,6 +51,7 @@
   "devDependencies": {
     "@size-limit/preset-small-lib": "^4.9.1",
     "@types/gunzip-maybe": "^1.4.0",
+    "@types/micromatch": "^4.0.1",
     "@types/tar-fs": "^2.0.0",
     "@types/yargs": "^15.0.12",
     "husky": "^4.3.6",
@@ -60,10 +61,11 @@
     "typescript": "^4.1.3"
   },
   "dependencies": {
-    "chalk": "^4.1.0",
     "cachedir": "^2.3.0",
+    "chalk": "^4.1.0",
     "cross-spawn": "^7.0.1",
     "gunzip-maybe": "^1.4.1",
+    "micromatch": "^4.0.2",
     "mvdir": "^1.0.21",
     "tar-fs": "^2.1.0",
     "yargs": "^16.2.0"

@@ -40,7 +40,8 @@ export const moveEnFoldersIn = async (fromWD: string, toWD: string, settings: Se
 }
 
 export const moveLocaleFoldersIn = async (appWD: string, lclWD: string, settings: Settings) => {
-  const name = lclWD.includes("tmp") || lclWD.includes("Caches") ? settings.app : lclWD
+  const isFromTmp = lclWD.includes("tmp") || lclWD.includes("Caches")
+  const name = isFromTmp ? settings.app : lclWD
   console.error(`Moved locale files from ${chalk.bold(name)}:\n`)
 
   for (const root of settings.docsRoots) {
@@ -53,7 +54,8 @@ export const moveLocaleFoldersIn = async (appWD: string, lclWD: string, settings
       await mvdir(join(fromDir, lang), join(toDir, lang), { copy: true })
     }
 
-    console.error(`  ${chalk.bold(fromDir)} [${folders.join(", ")}] -> ${chalk.bold(toDir)}`)
+    const displayFrom = isFromTmp ? "[cache]" + fromDir.replace(root.from, "") : fromDir
+    console.error(`  ${chalk.bold(displayFrom)} [${folders.join(", ")}] -> ${chalk.bold(toDir)}`)
   }
 
   console.error("")

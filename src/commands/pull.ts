@@ -17,7 +17,7 @@ export const pullCommand = async (opts: { target: string; toCwd: string; fromCwd
 
   // Grab a copy of the other repo, and pull in the files
   if (!localCopy) {
-    if (!existsSync(cachedir)) mkdirSync(cachedir)
+    if (!existsSync(cachedir)) mkdirSync(cachedir, { recursive: true })
     if (!existsSync(join(cachedir, user))) mkdirSync(join(cachedir, user))
 
     await getGHTar({

@@ -1,6 +1,6 @@
 import yargs from 'yargs/yargs'
 import { getEnglish } from './commands/getEnglishFiles';
-import { pullCommand } from './commands/pull';
+import { pullCommand, rmCommand } from './commands/pull';
 import { updateIssues } from './commands/updateIssues';
 import { validate } from './commands/validate';
 
@@ -28,6 +28,13 @@ yargs(process.argv.slice(2)).scriptName("docs-sync")
   argv.options("from-cwd", { type: "string", description: "Instead of downloading from GitHub, you can use a local dir as the place to pull from"})
 }, (argv: CLIOpts) => {
   pullCommand(argv)
+})
+
+.command('delete-translations  <target>', 'Remove translation files from an app repo',  (argv) => {
+  argv.options("to-cwd", { type: "string", default: ".", description: "What folder do you want to treat as the base for the localize.json to use" })
+  argv.options("from-cwd", { type: "string", description: "Instead of downloading from GitHub, you can use a local dir as the place to pull from"})
+}, (argv: CLIOpts) => {
+  rmCommand(argv)
 })
 
 .command('get-en <source>', 'Used in localizations to get the english versions', (argv) => {

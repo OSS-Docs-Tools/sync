@@ -1,13 +1,14 @@
 // node dist/index.js pull  asda/asdasd 111 --from-cwd ./fixtures/target --to-cwd fixtures/source
+// node dist/index.js delete-translations  asda/asdasd 111 --from-cwd ./fixtures/target --to-cwd fixtures/source
 
 import { readFileSync, readdirSync } from "fs"
-import { moveLocaleFoldersIn } from "../util/setupFolders"
+import { deleteLocaleFiles, moveLocaleFoldersIn } from "../util/setupFolders"
 import { existsSync, mkdirSync } from "fs"
 import { join } from "path"
 import { ghRepresentationForPath } from "../util/refForPath"
 import { getGHTar } from "../util/getGHTar"
 
-export const pullCommand = async (opts: { target: string; toCwd: string; fromCwd?: string }) => {
+export const setup = async (opts: { target: string; toCwd: string; fromCwd?: string }) => {
   const ghRep = ghRepresentationForPath(opts.target)
 
   const cachedir: string = require("cachedir")("oss-doc-sync")
@@ -39,5 +40,17 @@ export const pullCommand = async (opts: { target: string; toCwd: string; fromCwd
   }
 
   const settings = JSON.parse(readFileSync(localizeJSONPath, "utf8"))
+  return { toDir, localCopy, settings }
+}
+
+
+export const rmCommand = async (opts: { target: string; toCwd: string; fromCwd?: string }) => {
+  const {toDir, localCopy, settings } = await setup(opts)
+  deleteLocaleFiles(toDir, localCopy, settings)
+}
+
+
+export const pullCommand = async (opts: { target: string; toCwd: string; fromCwd?: string }) => {
+  const {toDir, localCopy, settings } = await setup(opts)
   moveLocaleFoldersIn(toDir, localCopy, settings)
 }

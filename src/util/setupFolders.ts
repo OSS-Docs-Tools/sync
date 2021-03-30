@@ -1,5 +1,5 @@
 import chalk from "chalk"
-import { readdirSync, existsSync, statSync } from "fs"
+import { readdirSync, existsSync, statSync, rmdirSync } from "fs"
 import { join } from "path"
 import type { Settings } from ".."
 
@@ -60,3 +60,26 @@ export const moveLocaleFoldersIn = async (appWD: string, lclWD: string, settings
 
   console.error("")
 }
+
+export const deleteLocaleFiles = async (appWD: string, lclWD: string, settings: Settings) => {
+  const isFromTmp = lclWD.includes("tmp") || lclWD.includes("Caches")
+  const name = isFromTmp ? settings.app : lclWD
+  console.error(`Moved preparing to delete locales from ${chalk.bold(name)}:\n`)
+
+  for (const root of settings.docsRoots) {
+    const fromDir = join(lclWD, root.to)
+    const toDir = join(appWD, root.from)
+    
+    
+    const allFolders = readdirSync(fromDir)
+    const folders = allFolders.filter(f => statSync(join(fromDir, f)).isDirectory()).filter(f => f !== "en")
+    for (const lang of folders) {
+      rmdirSync(join(toDir, lang), { recursive: true })
+    }
+
+    console.error(`  ${chalk.bold("rm'd")} [${folders.join(", ")}]`)
+  }
+
+  console.error("")
+}
+

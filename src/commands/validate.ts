@@ -69,7 +69,7 @@ export const validate = async (opts: { toCwd: string; fromCwd?: string }) => {
           wrong.push({ path, lang, from: root.from })
         }
       })
-      process.stderr.write(error ? cross : tick)
+      process.stderr.write(" " + error ? cross : tick)
     })
   }
   console.error("")

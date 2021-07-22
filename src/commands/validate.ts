@@ -7,7 +7,7 @@ import { recursiveReadDirSync } from "../util/recursiveReadDirSync"
 import { cloneRepo } from "../util/cloneRepo"
 import micromatch  from 'micromatch'
 
-// node dist/index.js validate  --to-cwd fixtures/target --from-cwd ./fixtures/source
+// node dist/index.js validate-against-en  --to-cwd fixtures/target --from-cwd ./fixtures/source
 
 const tick = chalk.bold.greenBright("✓")
 const cross = chalk.bold.redBright("⤫")
@@ -30,19 +30,19 @@ export const validate = async (opts: { toCwd: string; fromCwd?: string }) => {
     localCopy = await cloneRepo(ghRep)
   }
 
-  const wrong: { path: string; lang: string; from: string }[] = []
-
+  const wrong: { path: string; lang: string; from: string, expected: string}[] = []
+  
   for (const root of settings.docsRoots) {
     process.stderr.write(`\n  ${chalk.bold(root.to)}:`)
-
+    
     const appDir = join(localCopy, root.from)
     const toDir = join(opts.toCwd, root.to)
-
+    
     const en = join(appDir, "en")
     if (!existsSync(en)) {
       throw new Error(`No en folder found at ${en}.`)
     }
-
+    
     const englishTree = recursiveReadDirSync(en)
     let allFolders = readdirSync(toDir)
 
@@ -62,16 +62,17 @@ export const validate = async (opts: { toCwd: string; fromCwd?: string }) => {
       langTree.forEach(path => {
         const enRelative = path.replace(fullpath, "")
         const reRooted = join(appDir, "en", enRelative)
-
         if (!englishTree.includes(reRooted)) {
           error = true
           process.exitCode = 1
-          wrong.push({ path, lang, from: root.from })
+          wrong.push({ path, lang, from: root.from, expected: reRooted })
         }
       })
-      process.stderr.write(" " + error ? cross : tick)
+
+      process.stderr.write(" " + (error ? cross : tick))
     })
   }
+
   console.error("")
 
   if (wrong.length) {
@@ -79,7 +80,20 @@ export const validate = async (opts: { toCwd: string; fromCwd?: string }) => {
 
     wrong.forEach(w => {
       console.error("  " + w.path)
+      console.error("  > Expected " + w.expected)
     })
+
+    console.error("\n# All English files\n")
+
+    for (const root of settings.docsRoots) {
+      console.error(`### ${root.name}\n`)
+
+      const appDir = join(localCopy, root.from)
+      const en = join(appDir, "en")
+      const enLang = recursiveReadDirSync(en)
+      process.stderr.write(" - ")
+      console.error(enLang.join(" - "))
+    }
 
     console.error("\n")
   }
